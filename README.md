@@ -9,4 +9,10 @@ This repository contains beginner-friendly examples of using PySpark DataFrame D
 - Case-sensitive filters
 - Logical operators (AND, NOT)
 - Pattern matching using `like()`
+- Sorting DataFrames using `orderBy()`
+- Selecting distinct records using `distinct()`
+- Counting distinct values using `count()`
+- Column-based operations using `pyspark.sql.functions.col`
+- Multi-column ordering 
+- Selecting multiple columns
 
