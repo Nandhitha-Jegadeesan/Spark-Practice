@@ -33,9 +33,6 @@ df = spark.createDataFrame(data, columns)
 df.show()
 
 
-
-from pyspark.sql.functions import col
-
 # Select all columns
 seldf = df.select("id", "name", "department", "salary")
 seldf.show()
