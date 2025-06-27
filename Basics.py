@@ -1,17 +1,17 @@
-
-from pyspark import SparkConf
-from pyspark import SparkContext
-from pyspark.sql import SparkSession
-conf = SparkConf().setAppName("pyspark").setMaster("local[*]").set("spark.driver.host","localhost").set("spark.driver.allowMultipleContexts","true")
-sc = SparkContext(conf=conf)
-spark = SparkSession.builder.config("spark.driver.allowMultipleContexts","true").getOrCreate()
-print("DONE==== START YOUR WORK👇 ")
-
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col
 
-spark = SparkSession.builder.appName("Practice").getOrCreate()
+# Initialize SparkSession
+spark = SparkSession.builder \
+    .appName("Practice") \
+    .master("local[*]") \
+    .config("spark.driver.host", "localhost") \
+    .config("spark.driver.allowMultipleContexts", "true") \
+    .getOrCreate()
 
+print("DONE==== START YOUR WORK 👇")
+
+# Sample data
 data = [
     (1, "Alice", "Sales", 30000),
     (2, "Bob", "HR", 40000),
@@ -23,39 +23,56 @@ data = [
     (8, "Arun", "HR", 30000)
 ]
 
+# Column names
 columns = ["id", "name", "department", "salary"]
 
+# Create DataFrame
 df = spark.createDataFrame(data, columns)
+
+# Show DataFrame
 df.show()
 
 
+
+from pyspark.sql.functions import col
+
+# Select all columns
 seldf = df.select("id", "name", "department", "salary")
 seldf.show()
 
-fildf = df.filter("department ='Sales'")
+# Filter by department using col()
+fildf = df.filter(col("department") == "Sales")
 fildf.show()
 
+# Select single column
 sindf = df.select("name")
 sindf.show()
 
+# Select multiple columns
 muldf = df.select("name", "salary")
 muldf.show()
 
-mulfil = df.filter("department = 'HR' and salary > 45000")
+# Multiple filters with col()
+mulfil = df.filter((col("department") == "HR") & (col("salary") > 45000))
 mulfil.show()
 
-alpdf = df.filter("name like 'A%'")
+# Name starts with A
+alpdf = df.filter(col("name").like("A%"))
 alpdf.show()
 
-negdf = df.filter ("department != 'Finance'")
+# Negation filter
+negdf = df.filter(col("department") != "Finance")
 negdf.show()
 
-logdf = df.filter("salary > 40000 and department = 'Sales'")
+# Logical AND
+logdf = df.filter((col("salary") > 40000) & (col("department") == "Sales"))
 logdf.show()
 
-aldf = df.select(df.name.alias("employee_name"), df.salary.alias("emp_salary") )
+# Aliased columns
+aldf = df.select(col("name").alias("employee_name"), col("salary").alias("emp_salary"))
 aldf.show()
 
-casedf = df.filter("name = 'Alice'")
+# Case-sensitive filter
+casedf = df.filter(col("name") == "Alice")
 casedf.show()
 
