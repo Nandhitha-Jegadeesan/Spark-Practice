@@ -100,15 +100,7 @@ spark.sql("SELECT * FROM people WHERE age > 30").show()
 createOrReplaceTempView(): view is session-scoped.
 createGlobalTempView(): view is global across sessions and must be accessed via global_temp.view_name.
 
-18. How do you join two temporary views using Spark SQL?
-
-SELECT a.id, b.name FROM view1 a JOIN view2 b ON a.id = b.id
-
-19. How can you perform aggregation using spark.sql() on a temp view?
-
-SELECT department, COUNT(*) as emp_count FROM employees GROUP BY department
-
-20. What are the limitations of using temporary views in Spark SQL for large datasets?
+18. What are the limitations of using temporary views in Spark SQL for large datasets?
 
 They are stored in memory and can cause memory issues for large data.
 Not persistent—lost when the session ends.
