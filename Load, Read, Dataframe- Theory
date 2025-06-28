@@ -1,0 +1,115 @@
+Create content with answers to the 20 Spark interview questions
+
+### Spark Big Data Interview Questions and Answers
+
+1. How do you load a CSV file into a Spark DataFrame with headers and infer schema?
+
+csvdf = spark.read.format("csv").option("header", True).option("inferSchema", True).load("path/to/file.csv")
+
+2. What happens if you skip the header=True option while reading a CSV in Spark?
+
+If header=True is not set, Spark treats the first row as data, not as column names.
+
+3. How can you handle missing values while loading a CSV file in Spark?
+
+You can use options like option("nullValue", "NA") while loading and handle them using na.drop() or na.fill() after loading.
+
+df = spark.read.option("header", True).option("nullValue", "NA").csv("file.csv")
+df = df.na.fill("default_value")
+
+4. Explain the difference between .csv(), .option(), and .load() in reading CSVs.
+
+.csv() is a shortcut for reading CSVs.
+.option() sets parameters like header, delimiter, inferSchema, etc.
+.load() is used in combination with .format("csv") to load data from a path.
+
+5. How can you load a CSV file with a custom delimiter (e.g., |) in Spark?
+
+df = spark.read.option("header", True).option("delimiter", "|").csv("file.csv")
+
+6. What are the key options available in .read.csv() for controlling CSV parsing?
+
+header: Boolean, true if first row is header
+inferSchema: Boolean, true to auto-detect column types
+delimiter: Char, to specify delimiter (default is ,)
+nullValue: String, to recognize as null
+quote: Character used for quoting
+
+7. How can you load multiple CSV files at once using Spark?
+
+You can use wildcards or a list of files.
+
+df = spark.read.csv("path/*.csv")
+# or
+df = spark.read.csv(["file1.csv", "file2.csv"])
+
+8. What happens if a CSV has inconsistent column lengths?
+
+Spark may fail to read the file or fill missing columns with nulls, depending on settings. Consistent schema is recommended.
+
+9. What is a DataFrame in Spark and how is it different from an RDD?
+
+A DataFrame is a distributed table with rows and named columns.
+RDD is a low-level distributed collection.
+DataFrames are optimized via Catalyst and support SQL; RDDs require more manual transformations.
+
+10. How do you create a DataFrame manually using a list of tuples in PySpark?
+
+data = [(1, "Alice"), (2, "Bob")]
+df = spark.createDataFrame(data, ["id", "name"])
+
+11. What are the different ways to create a DataFrame from a CSV file?
+
+Using .read.csv("file.csv")
+Using .read.format("csv").load("file.csv")
+Using DataFrame APIs like createDataFrame() for manual input
+
+12. How can you cast a column to a different data type after creating a DataFrame?
+
+from pyspark.sql.functions import col
+df = df.withColumn("age", col("age").cast("Integer"))
+
+13. How do you select specific columns or filter rows in a DataFrame?
+
+df.select("name", "age").show()
+df.filter(col("age") > 25).show()
+
+14. What is the difference between select() and withColumn() in DataFrames?
+
+select() returns a new DataFrame with selected columns.
+withColumn() adds a new column or updates an existing one.
+
+15. What is the role of a schema in a DataFrame, and how can you define one manually?
+
+Schema defines column names and types. You can define it using StructType:
+
+from pyspark.sql.types import StructType, StructField, StringType, IntegerType
+schema = StructType([
+    StructField("id", IntegerType(), True),
+    StructField("name", StringType(), True)
+])
+df = spark.read.schema(schema).csv("file.csv")
+
+16. How do you create a temporary view from a DataFrame and query it using SQL?
+
+df.createOrReplaceTempView("people")
+spark.sql("SELECT * FROM people WHERE age > 30").show()
+
+17. What is the difference between createOrReplaceTempView() and createGlobalTempView()?
+
+createOrReplaceTempView(): view is session-scoped.
+createGlobalTempView(): view is global across sessions and must be accessed via global_temp.view_name.
+
+18. How do you join two temporary views using Spark SQL?
+
+SELECT a.id, b.name FROM view1 a JOIN view2 b ON a.id = b.id
+
+19. How can you perform aggregation using spark.sql() on a temp view?
+
+SELECT department, COUNT(*) as emp_count FROM employees GROUP BY department
+
+20. What are the limitations of using temporary views in Spark SQL for large datasets?
+
+They are stored in memory and can cause memory issues for large data.
+Not persistent—lost when the session ends.
+Not optimal for large-scale data transformations across clusters.
