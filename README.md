@@ -1,6 +1,5 @@
 # PySpark DataFrame Operations (DSL)
-
-This repository contains beginner-friendly examples of using PySpark DataFrame DSL (Domain-Specific Language) for data processing.
+Welcome to the **PySpark Basics** repository! This project is a personal learning tracker and hands-on workspace where I practice and document foundational PySpark concepts including:
 
 ## 📌 Topics Covered
 - Column selection using `select()`
@@ -15,4 +14,7 @@ This repository contains beginner-friendly examples of using PySpark DataFrame D
 - Column-based operations using `pyspark.sql.functions.col`
 - Multi-column ordering 
 - Selecting multiple columns
-
+- Loading CSV files
+- Creating DataFrames
+- Creating Temp Views
+- Running SQL queries using `spark.sql()`
