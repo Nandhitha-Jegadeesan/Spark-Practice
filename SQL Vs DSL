@@ -1,0 +1,71 @@
+ Let's compare SQL vs Spark DSL (DataFrame API) syntax side by side using common filtering and selecting queries.
+
+We'll use this sample DataFrame:
+
++----------+---------+----------+--------+--------+
+| customer | product | category | amount | city   |
++----------+---------+----------+--------+--------+
+| Nandhu   | Laptop  | Electronics | 50000 | Chennai|
+| Priya    | Chips   | Grocery     | 100   | Mumbai |
+| John     | Phone   | Electronics | 30000 | Delhi  |
+| Sara     | Rice    | Grocery     | 2000  | Chennai|
++----------+---------+----------+--------+--------+
+
+Assume the Spark DataFrame is called `df` and a temporary SQL view is created like:
+
+df.createOrReplaceTempView("sales")
+
+### 🔍 1. Select Specific Columns
+
+| SQL                                    | Spark DSL                                 |
+| -------------------------------------- | ----------------------------------------- |
+| `SELECT customer, product FROM sales;` | `df.select("customer", "product").show()` |
+
+---
+
+### 🔍 2. Filter Rows by Condition
+
+| SQL                                               | Spark DSL                                        |
+| ------------------------------------------------- | ------------------------------------------------ |
+| `SELECT * FROM sales WHERE category = 'Grocery';` | `df.filter(col("category") == "Grocery").show()` |
+
+---
+
+### 🔍 3. Filter by Multiple Conditions
+
+| SQL                                                                 | Spark DSL                                                                   |
+| ------------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| `SELECT * FROM sales WHERE category = 'Grocery' AND amount < 1000;` | `df.filter((col("category") == "Grocery") & (col("amount") < 1000)).show()` |
+
+---
+
+### 🔍 4. LIKE Filter
+
+| SQL                                             | Spark DSL                                      |
+| ----------------------------------------------- | ---------------------------------------------- |
+| `SELECT * FROM sales WHERE customer LIKE 'N%';` | `df.filter(col("customer").like("N%")).show()` |
+
+---
+
+### 🔍 5. IN Clause
+
+| SQL                                                       | Spark DSL                                                |
+| --------------------------------------------------------- | -------------------------------------------------------- |
+| `SELECT * FROM sales WHERE city IN ('Chennai', 'Delhi');` | `df.filter(col("city").isin("Chennai", "Delhi")).show()` |
+
+---
+
+### 🔍 6. ALIAS (Renaming Columns)
+
+| SQL                                         | Spark DSL                                               |
+| ------------------------------------------- | ------------------------------------------------------- |
+| `SELECT amount AS total_amount FROM sales;` | `df.select(col("amount").alias("total_amount")).show()` |
+
+---
+
+### 🔍 7. DISTINCT
+
+| SQL                                | Spark DSL                             |
+| ---------------------------------- | ------------------------------------- |
+| `SELECT DISTINCT city FROM sales;` | `df.select("city").distinct().show()` |
+
