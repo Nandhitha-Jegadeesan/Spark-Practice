@@ -18,3 +18,4 @@ Welcome to the **PySpark Basics** repository! This project is a personal learnin
 - Creating DataFrames
 - Creating Temp Views
 - Running SQL queries using `spark.sql()`
+- SQL Vs DSL syntax
