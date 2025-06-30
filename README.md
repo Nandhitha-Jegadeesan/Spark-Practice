@@ -20,4 +20,5 @@ Welcome to the **PySpark Basics** repository! This project is a personal learnin
 - Running SQL queries using `spark.sql()`
 - SQL Vs DSL syntax
 - Spark SQL Basics
-- Aggregation Functions(count, min,max,sum,avg)
+- Spark SQL Aggregation Functions(count, min,max,sum,avg)
+- Spark DSL (.groupBy().agg())
