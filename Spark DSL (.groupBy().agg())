@@ -1,0 +1,58 @@
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import sum, avg, min, max, count, col
+
+# Initialize Spark Session
+spark = SparkSession.builder.appName("GroupByAggPractice").getOrCreate()
+
+# 1. Region Revenue and Quantity
+data1 = [("East", 10, 200), ("West", 15, 300), ("East", 12, 250), ("West", 20, 400), ("South", 18, 360)]
+df1 = spark.createDataFrame(data1, ["region", "quantity", "revenue"])
+df1.groupBy("region").agg(sum("revenue").alias("total_rev"), sum("quantity").alias("total_qun")).show()
+
+# 2. Average Salary by Department
+data2 = [(1, "Alice", "HR", 3000), (2, "Bob", "Finance", 4000), (3, "Chilly", "Sales", 5000)]
+df2 = spark.createDataFrame(data2, ["id", "name", "Department", "salary"])
+df2.groupBy("Department").agg(avg("salary").alias("avg_salary"), min("salary").alias("min_sal"), max("salary").alias("max_sal")).show()
+
+# 3. Orders per Customer
+data3 = [(101, "C001", 500), (102, "C001", 700), (103, "C002", 300)]
+df3 = spark.createDataFrame(data3, ["order_id", "customer_id", "order_amount"])
+df3.groupBy("customer_id").agg(count("order_id").alias("no_of_orders"), sum("order_amount").alias("total")).show()
+
+# 4. Product Popularity
+data4 = [("P001", "S001", 10), ("P001", "S002", 20), ("P002", "S001", 30)]
+df4 = spark.createDataFrame(data4, ["product_id", "store_id", "quantity_sold"])
+df4.groupBy("product_id").agg(sum("quantity_sold").alias("total"), avg("quantity_sold").alias("avg_sold")).show()
+
+# 5. Revenue by Month
+data5 = [("Jan", 1000, 1), ("Jan", 1500, 2), ("Feb", 2000, 3)]
+df5 = spark.createDataFrame(data5, ["month", "revenue", "transaction_id"])
+df5.groupBy("month").agg(sum("revenue").alias("total"), avg("revenue").alias("avg_rev"), count("transaction_id").alias("count")).show()
+
+# 6. Department-wise Count and Salary
+data6 = [("Alice", "HR", 3000), ("Bob", "Finance", 4000), ("Chilly", "Sales", 5000)]
+df6 = spark.createDataFrame(data6, ["name", "department", "salary"])
+df6.groupBy("department").agg(count("name").alias("emp"), avg("salary").alias("avg_Sal")).show()
+
+# 7. Active Customers
+data7 = [(101, "C001", 500), (102, "C001", 700), (103, "C002", 300)]
+df7 = spark.createDataFrame(data7, ["order_id", "customer_id", "order_value"])
+df7.groupBy("customer_id").agg(count("order_id").alias("oid"), avg("order_value").alias("oval")).show()
+
+# 8. Store Performance
+data8 = [("S001", 1000, 50), ("S001", 1500, 40), ("S002", 2000, 30)]
+df8 = spark.createDataFrame(data8, ["store_id", "sales_amount", "discount"])
+df8.groupBy("store_id").agg(sum("sales_amount").alias("total"), avg("discount").alias("dis")).show()
+
+# 9. Category-wise Sales
+data9 = [("Electronics", 100, 10000), ("Clothing", 200, 15000), ("Electronics", 150, 12000)]
+df9 = spark.createDataFrame(data9, ["category", "units_sold", "revenue"])
+df9.groupBy("category").agg(sum("units_sold").alias("sold"), sum("revenue").alias("tot_rev")).show()
+
+# 10. Daily CTR Calculation
+data10 = [("2023-01-01", 100, 1000), ("2023-01-02", 150, 1200)]
+df10 = spark.createDataFrame(data10, ["date", "clicks", "impressions"])
+df10 = df10.groupBy("date").agg(sum("clicks").alias("tot_click"), sum("impressions").alias("tot_imp"))
+df10.withColumn("CTR", col("tot_click") / col("tot_imp")).show()
+
+spark.stop()
