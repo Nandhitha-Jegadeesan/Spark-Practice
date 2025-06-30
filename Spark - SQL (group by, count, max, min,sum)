@@ -1,0 +1,77 @@
+from pyspark.sql import SparkSession
+
+spark = SparkSession.builder.appName("PracticeAggregationQueries").getOrCreate()
+
+# Registering temporary views for SQL usage
+orders_df.createOrReplaceTempView("orders")
+employees_df.createOrReplaceTempView("emp")
+products_df.createOrReplaceTempView("product")
+reviews_df.createOrReplaceTempView("review")
+
+# Q1: Total number of orders placed by each customer
+spark.sql("""
+    SELECT customer_id, COUNT(*) AS total_orders
+    FROM orders
+    GROUP BY customer_id
+""").show()
+
+# Q2: Average salary of employees
+spark.sql("""
+    SELECT AVG(salary) AS average_salary
+    FROM emp
+""").show()
+
+# Q3: Min and Max product price grouped by category
+spark.sql("""
+    SELECT category, MIN(price) AS minimum, MAX(price) AS maximum
+    FROM product
+    GROUP BY category
+""").show()
+
+# Q4: Count of employees
+spark.sql("""
+    SELECT COUNT(emp_id) AS no_of_employees
+    FROM emp
+""").show()
+
+# Q5: Total revenue per product name
+spark.sql("""
+    SELECT name, SUM(price) AS revenues
+    FROM product
+    GROUP BY name
+""").show()
+
+# Q6: Maximum salary in each department
+spark.sql("""
+    SELECT department, MAX(salary) AS highest_salary
+    FROM emp
+    GROUP BY department
+""").show()
+
+# Q7: Average rating per product
+spark.sql("""
+    SELECT product_id, AVG(rating) AS avg_rating
+    FROM review
+    GROUP BY product_id
+""").show()
+
+# Q8: Total sales per region
+spark.sql("""
+    SELECT region, SUM(order_amount) AS total_sales
+    FROM orders
+    GROUP BY region
+""").show()
+
+# Q9: Max and Min quantity sold per product
+spark.sql("""
+    SELECT product_id, MAX(quantity_sold) AS highest, MIN(quantity_sold) AS lowest
+    FROM orders
+    GROUP BY product_id
+""").show()
+
+# Q10: Count of products supplied by each vendor
+spark.sql("""
+    SELECT vendor, COUNT(name) AS product_count
+    FROM product
+    GROUP BY vendor
+""").show()
