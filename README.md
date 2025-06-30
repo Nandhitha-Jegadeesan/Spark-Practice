@@ -19,3 +19,5 @@ Welcome to the **PySpark Basics** repository! This project is a personal learnin
 - Creating Temp Views
 - Running SQL queries using `spark.sql()`
 - SQL Vs DSL syntax
+- Spark SQL Basics
+- Aggregation Functions(count, min,max,sum,avg)
