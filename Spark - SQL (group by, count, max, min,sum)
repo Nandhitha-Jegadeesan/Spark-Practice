@@ -1,6 +1,60 @@
 from pyspark.sql import SparkSession
 
-spark = SparkSession.builder.appName("PracticeAggregationQueries").getOrCreate()
+spark = SparkSession.builder.appName("PracticeData").getOrCreate()
+
+employees_data = [
+    (1, "Alice", "HR", 50000),
+    (2, "Bob", "Finance", 70000),
+    (3, "Charlie", "HR", 55000),
+    (4, "David", "IT", 60000),
+    (5, "Eva", "Finance", 75000),
+    (6, "Frank", "IT", 65000)
+]
+
+employees_columns = ["emp_id", "name", "department", "salary"]
+employees_df = spark.createDataFrame(employees_data, employees_columns)
+employees_df.show()
+
+
+orders_data = [
+    (101, "C1", 250, 3, "North"),
+    (102, "C2", 300, 4, "South"),
+    (103, "C1", 450, 2, "North"),
+    (104, "C3", 500, 1, "West"),
+    (105, "C2", 150, 3, "South"),
+    (106, "C3", 400, 2, "West")
+]
+
+orders_columns = ["order_id", "customer_id", "order_amount","quantity_sold", "region"]
+orders_df = spark.createDataFrame(orders_data, orders_columns)
+orders_df.show()
+
+products_data = [
+    ("P1", "Phone", "Electronics", 600, "VendorA"),
+    ("P2", "Laptop", "Electronics", 1200, "VendorB"),
+    ("P3", "Rice", "Grocery", 50, "VendorC"),
+    ("P4", "Oil", "Grocery", 80, "VendorC"),
+    ("P5", "Headphones", "Electronics", 200, "VendorA")
+]
+
+products_columns = ["product_id", "name", "category", "price", "vendor"]
+products_df = spark.createDataFrame(products_data, products_columns)
+products_df.show()
+
+
+reviews_data = [
+    ("R1", "P1", "C1", 4),
+    ("R2", "P1", "C2", 5),
+    ("R3", "P2", "C3", 3),
+    ("R4", "P3", "C2", 4),
+    ("R5", "P4", "C1", 2),
+    ("R6", "P2", "C1", 4)
+]
+
+reviews_columns = ["review_id", "product_id", "customer_id", "rating"]
+reviews_df = spark.createDataFrame(reviews_data, reviews_columns)
+reviews_df.show()
+
 
 # Registering temporary views for SQL usage
 orders_df.createOrReplaceTempView("orders")
